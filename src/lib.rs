@@ -2,6 +2,8 @@
 
 //! # datasets
 
+pub mod image;
+
 pub mod utils;
 
 /// A Dataset is basically an iterator, with some additional capabilities.
