@@ -92,7 +92,7 @@ impl MNISTDataset {
     }
 }
 
-impl<'a> Iterator for MNISTDataset {
+impl Iterator for MNISTDataset {
     type Item = (Vec<Vec<u8>>, u8);
 
     fn next(&mut self) -> Option<Self::Item> {
