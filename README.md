@@ -1,5 +1,11 @@
 # datasets
 
+## Tests
+
+```
+cargo test
+```
+
 # License
 
 This project is licensed under either of
