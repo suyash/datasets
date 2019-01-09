@@ -1,6 +1,7 @@
 use std::fmt;
 
-use rand::{rngs::ThreadRng, thread_rng, Rng};
+use rand::{Rng, SeedableRng};
+use rand_xorshift::XorShiftRng;
 
 /// A Dataset is basically an iterator, with some additional capabilities.
 ///
@@ -9,11 +10,11 @@ use rand::{rngs::ThreadRng, thread_rng, Rng};
 pub trait Dataset: Iterator {
     /// shuffle
     /// TODO: handle error when batch_size is 0
-    fn shuffle(self, buffer_size: usize) -> Shuffle<Self>
+    fn shuffle(self, buffer_size: usize, seed: u64) -> Shuffle<Self>
     where
         Self: Sized,
     {
-        Shuffle::new(self, buffer_size)
+        Shuffle::new(self, buffer_size, seed)
     }
 
     /// batch
@@ -37,9 +38,9 @@ impl<I> Dataset for I where I: Iterator {}
 /// ```
 /// use datasets::Dataset;
 ///
-/// let v: Vec<usize> = (0..8).shuffle(5).collect();
+/// let v: Vec<usize> = (0..8).shuffle(5, 0).collect();
 /// assert_eq!(v.len(), 8);
-/// println!("{:?}", v); // [4, 0, 2, 6, 3, 5, 7, 1]
+/// assert_eq!(v, vec![4, 2, 0, 3, 7, 6, 5, 1]);
 /// ```
 ///
 /// TODO: implement `seed` and `reshuffle_each_iteration` as defined at https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle.
@@ -50,14 +51,14 @@ where
     iter: I,
     buffer_size: usize,
     buffer: Vec<Option<<I as Iterator>::Item>>,
-    rng: ThreadRng,
+    rng: XorShiftRng,
 }
 
 impl<I> Shuffle<I>
 where
     I: Iterator,
 {
-    fn new(mut iter: I, buffer_size: usize) -> Shuffle<I> {
+    fn new(mut iter: I, buffer_size: usize, seed: u64) -> Shuffle<I> {
         // NOTE: cannot do vec! here because Option<<I as Iterator>::Item> does not implement Clone
         let mut buffer = Vec::with_capacity(buffer_size);
 
@@ -76,7 +77,7 @@ where
             iter,
             buffer_size,
             buffer,
-            rng: thread_rng(),
+            rng: XorShiftRng::seed_from_u64(seed),
         }
     }
 }
