@@ -6,6 +6,12 @@
 cargo test
 ```
 
+## Benchmarks
+
+```
+cargo bench
+```
+
 # License
 
 This project is licensed under either of

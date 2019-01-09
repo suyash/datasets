@@ -5,8 +5,14 @@ use rand_xorshift::XorShiftRng;
 
 /// A Dataset is basically an iterator, with some additional capabilities.
 ///
-/// - `shuffle(buffer_size)`: eagerly takes buffer_size items and returns shuffled
+/// - `shuffle(buffer_size, seed)`: eagerly takes buffer_size items and returns shuffled
 /// - `batch(batch_size)`: an array of batch_size at a time instead of 1 at a time
+///
+/// TODO:
+///
+/// - `padded_batch(batch_size, padding_value)`: make the dataset uniform by filling with `padding_value`.
+///
+/// The goal is for this interface to be at feature parity with `tensorflow.data.Dataset`.
 pub trait Dataset: Iterator {
     /// shuffle
     /// TODO: handle error when batch_size is 0
@@ -43,7 +49,7 @@ impl<I> Dataset for I where I: Iterator {}
 /// assert_eq!(v, vec![4, 2, 0, 3, 7, 6, 5, 1]);
 /// ```
 ///
-/// TODO: implement `seed` and `reshuffle_each_iteration` as defined at https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle.
+/// TODO: implement `reshuffle_each_iteration` as defined at https://www.tensorflow.org/api_docs/python/tf/data/Dataset#shuffle.
 pub struct Shuffle<I>
 where
     I: Iterator,
@@ -132,6 +138,8 @@ where
 /// assert_eq!(vals[0], vec![0, 1, 2, 3, 4]);
 /// assert_eq!(vals[1], vec![5, 6, 7]);
 /// ```
+///
+/// TODO: implement `drop_remainder` as defined at https://www.tensorflow.org/api_docs/python/tf/data/Dataset#batch
 #[derive(Debug)]
 pub struct Batch<I>
 where
