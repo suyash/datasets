@@ -17,7 +17,9 @@ use crate::Dataset;
 /// To get to 2D from 1D
 ///
 /// let mut iter = img1D.iter();
-/// let img2D = (0..28).map(|_| iter.take(28).collect()).collect();
+/// let img2D = (0..28)
+///     .map(|_| iter.by_ref().take(28).collect())
+///     .collect();
 pub fn load(
     download_dir: &Path,
 ) -> Result<
