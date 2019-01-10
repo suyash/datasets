@@ -10,12 +10,20 @@ use crate::Dataset;
 
 /// downloads the mnist dataset to the given `download_dir` and loads from it.
 /// This function returns a tuple with the train and test datasets respectively.
+///
+/// For the images, this returns a single vector of size 28 * 28 instead of a Vec<Vec<u8>>.
+/// The 2D version adds overhead for tensor containers that are *almost* always 1D.
+///
+/// To get to 2D from 1D
+///
+/// let mut iter = img1D.iter();
+/// let img2D = (0..28).map(|_| iter.take(28).collect()).collect();
 pub fn load(
     download_dir: &Path,
 ) -> Result<
     (
-        impl Dataset<Item = (Vec<Vec<u8>>, u8)>,
-        impl Dataset<Item = (Vec<Vec<u8>>, u8)>,
+        impl Dataset<Item = (Vec<u8>, u8)>,
+        impl Dataset<Item = (Vec<u8>, u8)>,
     ),
     Box<dyn Error>,
 > {
@@ -58,7 +66,7 @@ fn extract_dataset(
     features_path: &Path,
     labels_path: &Path,
     size: usize,
-) -> Result<impl Dataset<Item = (Vec<Vec<u8>>, u8)>, Box<dyn Error>> {
+) -> Result<impl Dataset<Item = (Vec<u8>, u8)>, Box<dyn Error>> {
     let (mut features, mut labels) = (File::open(features_path)?, File::open(labels_path)?);
 
     features.seek(SeekFrom::Start(16))?;
@@ -93,7 +101,7 @@ impl MNISTDataset {
 }
 
 impl Iterator for MNISTDataset {
-    type Item = (Vec<Vec<u8>>, u8);
+    type Item = (Vec<u8>, u8);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.current == self.size {
@@ -110,14 +118,7 @@ impl Iterator for MNISTDataset {
 
             self.current += 1;
 
-            let label = self.label_buffer[0];
-
-            let mut image = vec![vec![0; 28]; 28];
-            for (i, val) in self.image_buffer.iter().enumerate() {
-                image[i / 28][i % 28] = *val;
-            }
-
-            Some((image, label))
+            Some((self.image_buffer.clone(), self.label_buffer[0]))
         }
     }
 }

@@ -9,8 +9,8 @@ pub mod mnist;
 /// a shorthand for mnist::load, will simply download and load from `$HOME/.datasets/mnist`
 pub fn mnist() -> Result<
     (
-        impl Dataset<Item = (Vec<Vec<u8>>, u8)>,
-        impl Dataset<Item = (Vec<Vec<u8>>, u8)>,
+        impl Dataset<Item = (Vec<u8>, u8)>,
+        impl Dataset<Item = (Vec<u8>, u8)>,
     ),
     Box<dyn Error>,
 > {

@@ -12,28 +12,18 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     for (i, l) in train_data.take(1) {
         println!("label: {}", l);
-
         create_image(&i).save(format!("./tmp/{}_train.png", l))?;
-
-        for r in i {
-            println!("{:?}", r);
-        }
     }
 
     for (i, l) in test_data.take(1) {
         println!("label: {}", l);
-
         create_image(&i).save(format!("./tmp/{}_test.png", l))?;
-
-        for r in i {
-            println!("{:?}", r);
-        }
     }
 
     Ok(())
 }
 
-fn create_image(img: &Vec<Vec<u8>>) -> DynamicImage {
+fn create_image(img: &Vec<u8>) -> DynamicImage {
     let mut image = DynamicImage::new_luma8(28, 28);
 
     for i in 0..28 {
@@ -42,9 +32,9 @@ fn create_image(img: &Vec<Vec<u8>>) -> DynamicImage {
                 j, // x
                 i, // y
                 Rgba([
-                    img[i as usize][j as usize],
-                    img[i as usize][j as usize],
-                    img[i as usize][j as usize],
+                    img[(i * 28 + j) as usize],
+                    img[(i * 28 + j) as usize],
+                    img[(i * 28 + j) as usize],
                     255,
                 ]),
             );
