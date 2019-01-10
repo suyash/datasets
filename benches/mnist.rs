@@ -49,7 +49,7 @@ fn mnist_load_train_dataset_full(b: &mut Bencher) {
 
     b.iter(|| {
         let (train_dataset, _) = mnist::load(path).unwrap();
-        let v = train_dataset.collect::<Vec<(Vec<Vec<u8>>, u8)>>();
+        let v = train_dataset.collect::<Vec<(Vec<u8>, u8)>>();
         v.len()
     });
 }
@@ -63,7 +63,7 @@ fn mnist_load_test_dataset_full(b: &mut Bencher) {
 
     b.iter(|| {
         let (_, test_dataset) = mnist::load(path).unwrap();
-        let v = test_dataset.collect::<Vec<(Vec<Vec<u8>>, u8)>>();
+        let v = test_dataset.collect::<Vec<(Vec<u8>, u8)>>();
         v.len()
     });
 }
