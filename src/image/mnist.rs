@@ -8,7 +8,9 @@ use std::path::Path;
 use crate::utils::download;
 use crate::Dataset;
 
-/// downloads the mnist dataset to the given `download_dir` and loads from it.
+/// http://yann.lecun.com/exdb/mnist/
+///
+/// Downloads the mnist dataset to the given `download_dir` and loads from it.
 /// This function returns a tuple with the train and test datasets respectively.
 ///
 /// For the images, this returns a single vector of size 28 * 28 instead of a Vec<Vec<u8>>.
