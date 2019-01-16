@@ -15,6 +15,24 @@ use crate::Dataset;
 /// This function returns a tuple with the train and test datasets respectively.
 ///
 /// The tuple contains two values, the text of the review, and the rating for the review.
+///
+/// NOTE: There is no implicit shuffling, each dataset has 12500 positive reviews,
+/// followed by 12500 negative reviews. Be Careful. Ideally, you want to do
+///
+/// ```no_run
+/// # use std::error::Error;
+/// #
+/// use datasets::Dataset;
+/// use datasets::text::imdb_reviews;
+///
+/// # fn main() -> Result<(), Box<dyn Error>> {
+/// let (train_data, test_data) = imdb_reviews()?;
+/// let train_data = train_data.shuffle(25000, 42);
+/// let test_data = test_data.shuffle(25000, 42);
+///
+/// #   Ok(())
+/// # }
+/// ```
 pub fn load(
     download_dir: &Path,
 ) -> Result<
