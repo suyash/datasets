@@ -16,6 +16,6 @@ fn dataset_shuffle(b: &mut Bencher) {
 #[bench]
 fn dataset_batch(b: &mut Bencher) {
     b.iter(|| {
-        black_box((0..2048).batch(255).collect::<Vec<Vec<usize>>>());
+        black_box((0..2048).batch(255, false).collect::<Vec<Vec<usize>>>());
     });
 }
