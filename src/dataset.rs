@@ -6,11 +6,12 @@ use rand_xorshift::XorShiftRng;
 /// A Dataset is basically an iterator, with some additional capabilities.
 ///
 /// - `shuffle(buffer_size, seed)`: eagerly takes buffer_size items and returns shuffled
-/// - `batch(batch_size)`: an array of batch_size at a time instead of 1 at a time
+/// - `batch(batch_size, drop_remainder)`: an array of batch_size at a time instead of 1 at a time
 ///
 /// TODO:
 ///
 /// - `padded_batch(batch_size, padding_value)`: make the dataset uniform by filling with `padding_value`.
+/// - `window`?: described at https://github.com/tensorflow/community/blob/master/rfcs/20180726-tf-data-windowing-reducers.md
 ///
 /// The goal is for this interface to be at feature parity with `tensorflow.data.Dataset`.
 pub trait Dataset: Iterator {
@@ -25,13 +26,14 @@ pub trait Dataset: Iterator {
 
     /// batch
     /// TODO: handle error when batch_size is 0
-    fn batch(self, batch_size: usize) -> Batch<Self>
+    fn batch(self, batch_size: usize, drop_remainder: bool) -> Batch<Self>
     where
         Self: Sized,
     {
         Batch {
             iter: self,
             batch_size,
+            drop_remainder,
         }
     }
 }
@@ -138,8 +140,6 @@ where
 /// assert_eq!(vals[0], vec![0, 1, 2, 3, 4]);
 /// assert_eq!(vals[1], vec![5, 6, 7]);
 /// ```
-///
-/// TODO: implement `drop_remainder` as defined at https://www.tensorflow.org/api_docs/python/tf/data/Dataset#batch
 #[derive(Debug)]
 pub struct Batch<I>
 where
@@ -147,6 +147,7 @@ where
 {
     iter: I,
     batch_size: usize,
+    drop_remainder: bool,
 }
 
 impl<I> Iterator for Batch<I>
@@ -173,7 +174,11 @@ where
                 i += 1;
             }
 
-            Some(v)
+            if v.len() < self.batch_size && self.drop_remainder {
+                None
+            } else {
+                Some(v)
+            }
         }
     }
 }
