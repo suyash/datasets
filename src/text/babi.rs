@@ -1,5 +1,6 @@
 //! https://research.fb.com/downloads/babi/
 //! https://github.com/facebook/bAbI-tasks
+//! https://arxiv.org/abs/1502.05698
 
 use std::error::Error;
 use std::fs::File;

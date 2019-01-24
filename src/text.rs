@@ -5,7 +5,7 @@ use std::error::Error;
 use crate::Dataset;
 
 pub mod babi;
-pub mod imdb_reviews;
+pub mod imdb;
 
 /// a shorthand for imdb_reviews::load, will simply download and load from `$HOME/.datasets/mnist`
 pub fn imdb_reviews() -> Result<

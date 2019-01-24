@@ -33,7 +33,7 @@ use crate::Dataset;
 /// #   Ok(())
 /// # }
 /// ```
-pub fn load(
+pub fn reviews(
     download_dir: &Path,
 ) -> Result<
     (
