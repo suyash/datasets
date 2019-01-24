@@ -6,6 +6,7 @@ use crate::Dataset;
 
 pub mod babi;
 pub mod imdb;
+pub mod shakespeare;
 
 /// a shorthand for imdb_reviews::load, will simply download and load from `$HOME/.datasets/mnist`
 pub fn imdb_reviews() -> Result<
@@ -15,7 +16,7 @@ pub fn imdb_reviews() -> Result<
     ),
     Box<dyn Error>,
 > {
-    imdb_reviews::load(
+    imdb::reviews(
         &dirs::home_dir()
             .unwrap()
             .join(".datasets")
@@ -78,5 +79,16 @@ pub fn babi_hn_single_supporting_fact_task() -> Result<
             .join(".datasets")
             .join("babi")
             .join("tasks"),
+    )
+}
+
+/// shorthand for shakespeare::shakespeare_100000
+pub fn shakespeare_100000() -> Result<String, Box<dyn Error>> {
+    shakespeare::shakespeare_100000(
+        &dirs::home_dir()
+            .unwrap()
+            .join(".datasets")
+            .join("shakespeare")
+            .join("shakespeare_100000"),
     )
 }
