@@ -5,6 +5,7 @@ use std::error::Error;
 use crate::Dataset;
 
 pub mod babi;
+pub mod enron;
 pub mod imdb;
 pub mod shakespeare;
 
@@ -90,5 +91,17 @@ pub fn shakespeare_100000() -> Result<String, Box<dyn Error>> {
             .join(".datasets")
             .join("shakespeare")
             .join("shakespeare_100000"),
+    )
+}
+
+/// enron::spam
+pub fn enron_spam(
+) -> Result<(impl Dataset<Item = String>, impl Dataset<Item = String>), Box<dyn Error>> {
+    enron::spam(
+        &dirs::home_dir()
+            .unwrap()
+            .join(".datasets")
+            .join("enron")
+            .join("spam"),
     )
 }
