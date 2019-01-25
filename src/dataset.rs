@@ -134,7 +134,7 @@ where
 /// ```
 /// use datasets::Dataset;
 ///
-/// let vals: Vec<Vec<usize>> = (0..8).batch(5).collect();
+/// let vals: Vec<Vec<usize>> = (0..8).batch(5, false).collect();
 ///
 /// assert_eq!(vals.len(), 2);
 /// assert_eq!(vals[0], vec![0, 1, 2, 3, 4]);
