@@ -1,5 +1,11 @@
 # datasets
 
+Just some functions that download and then load some stuff.
+
+```
+cargo add datasets --git https://github.com/suyash/datasets
+```
+
 ## Tests
 
 ```
