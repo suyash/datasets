@@ -1,5 +1,7 @@
 # datasets
 
+[![Build Status](https://travis-ci.com/suyash/datasets.svg?branch=master)](https://travis-ci.com/suyash/datasets)
+
 Just some functions that download and then load some stuff.
 
 ```
